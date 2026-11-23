@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Car Cab – Book a car</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Figtree:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f6f2;--surface:#fff;--ink:#14213d;--muted:#5d6577;--line:#dcd8cc;--accent:#f2a900;--on-accent:#14213d;--ok:#1f7a4d;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#10151f;--surface:#1a2130;--ink:#f1efe8;--muted:#a3abbb;--line:#2e3749;--ok:#5cc58d}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#10151f;--surface:#1a2130;--ink:#f1efe8;--muted:#a3abbb;--line:#2e3749;--ok:#5cc58d}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Figtree,system-ui,sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque",Figtree,system-ui,sans-serif;margin:0;line-height:1.1}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+header.top{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
+.logo{font:800 22px "Bricolage Grotesque",sans-serif}
+.logo span{background:var(--accent);color:var(--on-accent);padding:1px 8px;border-radius:6px;margin-left:4px}
+.hero{padding:36px 0 28px}
+.hero h1{font-size:clamp(34px,7vw,64px);font-weight:800;max-width:14ch}
+.hero p{color:var(--muted);max-width:46ch;margin:14px 0 0}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 20px}
+.tab{border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:8px 16px;border-radius:999px;font:600 14px Figtree,sans-serif;cursor:pointer}
+.tab[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;padding-bottom:40px}
+.car{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.car .plate{background:var(--accent);color:var(--on-accent);padding:22px 18px 14px;font:800 26px "Bricolage Grotesque",sans-serif}
+.car .plate small{display:block;font:600 13px Figtree,sans-serif;opacity:.8;margin-top:2px}
+.car .plate svg{display:block;width:100%;height:auto;margin-bottom:10px}
+.car .body{padding:16px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
+.specs{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:14px}
+.price{font:700 22px "Bricolage Grotesque",sans-serif}
+.price span{font:400 14px Figtree,sans-serif;color:var(--muted)}
+.row{display:flex;justify-content:space-between;align-items:center;margin-top:auto;gap:10px}
+.btn{background:var(--ink);color:var(--bg);border:0;padding:11px 20px;border-radius:10px;font:600 15px Figtree,sans-serif;cursor:pointer}
+.btn.accent{background:var(--accent);color:var(--on-accent)}
+.btn:focus-visible,.tab:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.na{opacity:.55}
+[hidden]{display:none!important}
+.search{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:24px;padding:18px;background:var(--surface);border:1px solid var(--line);border-radius:14px;max-width:640px}
+.hinfo{grid-column:1/-1;color:var(--muted);font-weight:600;font-size:14px}
+#panel{background:var(--surface);border-top:1px solid var(--line);padding:32px 0 48px;min-height:70vh}
+#panel h2{font-size:28px;margin-bottom:18px}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+label{display:flex;flex-direction:column;gap:5px;font-size:14px;font-weight:600}
+input,select{font:16px Figtree,sans-serif;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);width:100%}
+.est{margin:18px 0;padding:14px 16px;border:1px dashed var(--line);border-radius:10px;font-weight:600}
+.msg{margin-top:16px;padding:14px 16px;border-radius:10px;border:1px solid var(--ok);color:var(--ok);font-weight:600}
+.err{color:#c0392b;font-size:14px;margin-top:10px}
+.my{margin-top:30px}
+.my h3{font-size:20px;margin-bottom:10px}
+.b{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px;flex-wrap:wrap}
+footer{padding:24px 0;color:var(--muted);font-size:14px;text-align:center}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div id="home"><div class="wrap">
+  <header class="top"><div class="logo">Car<span>Cab</span></div><div>Call: +91 98765 43210</div></header>
+  <section class="hero">
+    <h1>Pick a car. Book your ride.</h1>
+    <p>Choose from our cars, tell us where you are going, and we will confirm your booking on phone.</p>
+    <div class="search"><label>Pickup<select id="hpick"></select></label><label>Destination<select id="hdrop"></select></label><div class="hinfo" id="hinfo">Select pickup and destination to see fares.</div></div>
+  </section>
+  <h2 style="font-size:24px;margin-bottom:12px">Our cars</h2>
+  <div class="tabs" id="tabs"></div>
+  <div class="grid" id="cars"></div>
+</div></div>
+
+<section id="panel" hidden>
+  <div class="wrap">
+    <button class="tab" id="back">Back to all cars</button>
+    <h2 style="margin-top:16px">Book a car</h2>
+    <div class="fields">
+      <label>Your name<input id="name" autocomplete="name"></label>
+      <label>Phone number<input id="phone" inputmode="tel" autocomplete="tel"></label>
+      <label>Pickup location<select id="pickup"></select></label>
+      <label>Destination<select id="drop"></select></label>
+      <label>Date<input id="date" type="date"></label>
+      <label>Time<input id="time" type="time" value="09:00"></label>
+      <label>Car<select id="car"></select></label>
+      <label>Approx. distance (km, auto)<input id="km" type="number" min="1" value="50"></label>
+    </div>
+    <div class="est" id="est"></div>
+    <button class="btn accent" id="go">Confirm booking</button>
+    <div class="err" id="err" role="alert"></div>
+    <div id="done"></div>
+    <div class="my" id="my" hidden><h3>Your bookings</h3><div id="list"></div></div>
+  </div>
+</section>
+<footer>Car Cab · Siliguri, West Bengal</footer>
+
+<script>
+var CARS=[
+{id:1,name:"Maruti WagonR",type:"Hatchback",seats:4,rate:11,ac:true,bag:"1 bag",ok:true},
+{id:2,name:"Swift Dzire",type:"Sedan",seats:4,rate:13,ac:true,bag:"2 bags",ok:true},
+{id:3,name:"Maruti Ertiga",type:"SUV",seats:6,rate:16,ac:true,bag:"3 bags",ok:true},
+{id:4,name:"Mahindra Scorpio",type:"SUV",seats:7,rate:19,ac:true,bag:"4 bags",ok:false},
+{id:5,name:"Toyota Innova Crysta",type:"SUV",seats:7,rate:22,ac:true,bag:"4 bags",ok:true},
+{id:6,name:"Tempo Traveller",type:"Van",seats:12,rate:32,ac:true,bag:"8 bags",ok:true}
+];
+var filter="All",bookings=[],TRIP=0;
+var $=function(i){return document.getElementById(i)};
+function rupee(n){return "₹"+n.toLocaleString("en-IN")}
+function tabs(){
+  var t=["All","Hatchback","Sedan","SUV","Van"];
+  $("tabs").innerHTML=t.map(function(x){return '<button class="tab" data-t="'+x+'" aria-pressed="'+(x===filter)+'">'+x+'</button>'}).join("");
+  Array.prototype.forEach.call($("tabs").children,function(b){b.onclick=function(){filter=b.dataset.t;tabs();cars()}});
+}
+var SHAPES={
+Hatchback:['M18 70V58Q18 50 28 48L58 44L78 26Q82 22 90 22H150Q158 22 164 30L180 46L208 50Q222 52 222 64V70Z','M70 44L84 29H112V44ZM118 44V29H148L162 44Z',64,176],
+Sedan:['M14 70V58Q14 50 26 48L64 44L86 26Q90 23 98 23H142Q150 23 156 28L178 44L212 48Q228 50 228 62V70Z','M78 44L92 29H116V44ZM122 44V29H142L160 44Z',64,180],
+SUV:['M14 72V54Q14 46 24 44L48 40L66 20H168Q176 20 182 28L196 42L214 46Q228 48 228 60V72Z','M60 40L72 25H110V40ZM116 40V25H164L176 40Z',64,180],
+Van:['M10 72V30Q10 20 20 20H178Q188 20 194 28L218 50Q228 54 228 62V72Z','M24 28H60V46H24ZM68 28H104V46H68ZM112 28H148V46H112ZM156 28H178L200 46H156Z',58,182]
+};
+function art(t){
+  var s=SHAPES[t]||SHAPES.Sedan;
+  var w=function(x){return '<circle cx="'+x+'" cy="72" r="13" fill="#14213d"/><circle cx="'+x+'" cy="72" r="5" fill="#f7f6f2"/>'};
+  return '<svg viewBox="0 0 240 92" role="img" aria-label="'+t+' car"><path d="M4 85H236" stroke="#14213d" stroke-opacity=".25" stroke-width="2"/><path d="'+s[0]+'" fill="#14213d"/><path d="'+s[1]+'" fill="#f7f6f2" fill-opacity=".85"/><rect x="216" y="54" width="10" height="5" rx="2" fill="#f7f6f2"/>'+w(s[2])+w(s[3])+'</svg>';
+}
+function cars(){
+  var l=CARS.filter(function(c){return filter==="All"||c.type===filter});
+  $("cars").innerHTML=l.map(function(c){
+    return '<article class="car'+(c.ok?'':' na')+'"><div class="plate">'+art(c.type)+c.name+'<small>'+c.type+'</small></div><div class="body">'+
+    '<div class="specs"><span>'+c.seats+' seats</span><span>'+(c.ac?'AC':'Non-AC')+'</span><span>'+c.bag+'</span></div>'+
+    '<div class="row"><div>'+(TRIP?'<div class="price">'+rupee(c.rate*TRIP)+' <span>total for '+TRIP+' km</span></div><div class="specs">'+rupee(c.rate)+' per km</div>':'<div class="price">'+rupee(c.rate)+' <span>per km</span></div>')+'</div>'+
+    (c.ok?'<button class="btn" data-id="'+c.id+'">Book this car</button>':'<span>Not available</span>')+'</div></div></article>';
+  }).join("");
+  Array.prototype.forEach.call(document.querySelectorAll(".car .btn"),function(b){b.onclick=function(){
+    $("car").value=b.dataset.id;est();location.hash="book";
+  }});
+}
+function fillSelect(){
+  $("car").innerHTML=CARS.filter(function(c){return c.ok}).map(function(c){return '<option value="'+c.id+'">'+c.name+' ('+c.seats+' seats)</option>'}).join("");
+}
+function sel(){return CARS.filter(function(c){return String(c.id)===$("car").value})[0]}
+function est(){
+  var c=sel(),km=Math.max(0,+$("km").value||0);
+  $("est").textContent="Estimated fare: "+rupee(c.rate*km)+" ("+km+" km × "+rupee(c.rate)+"). Final fare is confirmed on phone.";
+}
+$("car").onchange=est;$("km").oninput=est;
+var PL=[["Siliguri Junction",26.7107,88.4287],["Siliguri City Centre",26.7271,88.3953],["New Jalpaiguri (NJP) Station",26.6830,88.4430],["Bagdogra Airport",26.6812,88.3286],["Kurseong",26.8800,88.2800],["Mirik",26.8870,88.1860],["Darjeeling",27.0360,88.2627],["Kalimpong",27.0594,88.4695],["Gangtok",27.3389,88.6065],["Lataguri (Gorumara)",26.8667,88.7833],["Jalpaiguri",26.5167,88.7333],["Cooch Behar",26.3452,89.4482],["Jaigaon (Bhutan border)",26.8546,89.3790]];
+function opts(ph){return '<option value="">'+ph+'</option>'+PL.map(function(p){return '<option>'+p[0]+'</option>'}).join("")}
+$("pickup").innerHTML=opts("Select pickup");$("drop").innerHTML=opts("Select destination");
+function findP(n){return PL.filter(function(p){return p[0]===n})[0]}
+function dist(){
+  var a=findP($("pickup").value),b=findP($("drop").value);
+  if(!a||!b||a===b)return;
+  var r=Math.PI/180,dl=(b[1]-a[1])*r,dn=(b[2]-a[2])*r;
+  var h=Math.sin(dl/2)*Math.sin(dl/2)+Math.cos(a[1]*r)*Math.cos(b[1]*r)*Math.sin(dn/2)*Math.sin(dn/2);
+  $("km").value=Math.max(5,Math.round(2*6371*Math.asin(Math.sqrt(h))*1.4));est();
+}
+$("hpick").innerHTML=opts("Select pickup");$("hdrop").innerHTML=opts("Select destination");
+function trip(){
+  var a=findP($("pickup").value),b=findP($("drop").value);
+  $("hpick").value=$("pickup").value;$("hdrop").value=$("drop").value;
+  if(a&&b&&a!==b){dist();TRIP=+$("km").value||0;$("hinfo").textContent="About "+TRIP+" km. Trip fares are shown on each car."}
+  else{TRIP=0;$("hinfo").textContent=(a&&b)?"Pickup and destination cannot be the same.":"Select pickup and destination to see fares."}
+  cars();
+}
+$("hpick").onchange=function(){$("pickup").value=$("hpick").value;trip()};
+$("hdrop").onchange=function(){$("drop").value=$("hdrop").value;trip()};
+$("pickup").onchange=trip;$("drop").onchange=trip;
+$("km").addEventListener("input",function(){if(TRIP){TRIP=+$("km").value||0;cars()}});
+$("go").onclick=function(){
+  var v={n:$("name").value.trim(),p:$("phone").value.trim(),a:$("pickup").value.trim(),d:$("drop").value.trim(),dt:$("date").value,t:$("time").value};
+  if(!v.n||!v.a||!v.d||!v.dt){$("err").textContent="Please fill name, pickup, destination and date.";return}
+  if(v.a===v.d){$("err").textContent="Pickup and destination cannot be the same.";return}
+  if(!/^[0-9+\s-]{10,15}$/.test(v.p)){$("err").textContent="Enter a valid phone number (10 digits).";return}
+  $("err").textContent="";
+  var c=sel(),km=Math.max(1,+$("km").value||1),id="CC"+Math.floor(1000+Math.random()*9000);
+  bookings.unshift({id:id,car:c.name,a:v.a,d:v.d,dt:v.dt,t:v.t,fare:c.rate*km});
+  $("done").innerHTML='<div class="msg">Booking confirmed. Your booking ID is '+id+'. We will call you on '+v.p.replace(/[<>&]/g,"")+' soon.</div>';
+  $("my").hidden=false;
+  $("list").innerHTML=bookings.map(function(b){
+    var s=function(x){return String(x).replace(/[<>&]/g,"")};
+    return '<div class="b"><span><b>'+b.id+'</b> · '+s(b.car)+'</span><span>'+s(b.a)+' to '+s(b.d)+'</span><span>'+s(b.dt)+' '+s(b.t)+'</span><span>'+rupee(b.fare)+'</span></div>';
+  }).join("");
+};
+var today=new Date().toISOString().slice(0,10);$("date").min=today;$("date").value=today;
+tabs();cars();fillSelect();est();
+function route(){var b=location.hash==="#book";$("home").hidden=b;$("panel").hidden=!b;window.scrollTo(0,0);if(b){$("name").focus({preventScroll:true})}}
+$("back").onclick=function(){location.hash=""};
+window.addEventListener("hashchange",route);route();
+</script>
+</body>
+</html>
